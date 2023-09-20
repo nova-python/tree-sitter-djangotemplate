@@ -1,0 +1,145 @@
+================================================================================
+Autoescape
+================================================================================
+{% autoescape on %}
+{% endautoescape %}
+--------------------------------------------------------------------------------
+
+(template
+  (block
+    (start_tag)
+    (arguments
+      (keyword))
+    (body
+      (text))
+    (end_tag)))
+
+================================================================================
+Standalone tag
+================================================================================
+{% csrf_token %}
+--------------------------------------------------------------------------------
+
+(template
+  (tag
+    (tag_name)))
+
+================================================================================
+Filter tag
+================================================================================
+{% filter lower|custom:"asdf"|escape %}
+  hello world
+{% endfilter %}
+--------------------------------------------------------------------------------
+
+(template
+  (block
+    (start_tag)
+    (arguments
+      (arg
+        (identifier)
+        (filters
+          (filter
+            (filter_name)
+            (arg
+              (string)))
+          (filter
+            (filter_name)))))
+    (body
+      (text))
+    (end_tag)))
+
+================================================================================
+For loop
+================================================================================
+{% for obj in objects|sorted %}
+  {{ obj }}
+{% empty %}
+  Nothing to see here.
+{% endfor %}
+--------------------------------------------------------------------------------
+
+(template
+  (block
+    (start_tag)
+    (arguments
+      (arg
+        (identifier))
+      (keyword_operator)
+      (arg
+        (identifier)
+        (filters
+          (filter
+            (filter_name)))))
+    (body
+      (text)
+      (variable
+        (var_name
+          (identifier)))
+      (text)
+      (tag
+        (tag_name))
+      (text))
+    (end_tag)))
+
+================================================================================
+Blocks
+================================================================================
+{% block main %}
+  {% block sub %}{% endblock %}
+{% endblock main %}
+--------------------------------------------------------------------------------
+
+(template
+  (block
+    (start_tag)
+    (arguments
+      (arg
+        (identifier)))
+    (body
+      (text)
+      (block
+        (start_tag)
+        (arguments
+          (arg
+            (identifier)))
+        (end_tag))
+      (text))
+    (end_tag)))
+
+================================================================================
+With
+================================================================================
+{% with x=True y=somevar z="hello" %}
+  {{ x|action:y }}
+{% endwith %}
+--------------------------------------------------------------------------------
+
+(template
+  (block
+    (start_tag)
+    (arguments
+      (kwarg
+        (name)
+        (arg
+          (boolean)))
+      (kwarg
+        (name)
+        (arg
+          (identifier)))
+      (kwarg
+        (name)
+        (arg
+          (string))))
+    (body
+      (text)
+      (variable
+        (var_name
+          (identifier))
+        (filters
+          (filter
+            (filter_name)
+            (arg
+              (identifier)))))
+      (text))
+    (end_tag)))
