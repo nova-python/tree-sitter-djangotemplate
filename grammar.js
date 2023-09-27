@@ -77,7 +77,7 @@ module.exports = grammar({
 
         identifier: ($) => sep1($._name, "."),
 
-        string: ($) => choice(/"[^"]+"/, /'[^']+'/),
+        string: ($) => choice(/"[^"]*"/, /'[^']*'/),
 
         number: ($) => /[\+\-]?[0-9\.]+/,
 

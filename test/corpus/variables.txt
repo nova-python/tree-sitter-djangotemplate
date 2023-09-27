@@ -30,3 +30,18 @@ This is {plain text} and {{ this }} is a variable.
     (var_name
       (identifier)))
   (text))
+
+======
+Empty string
+======
+{{ some.var|default_if_none:"" }}
+------
+(template
+  (variable
+    (var_name
+      (identifier))
+    (filters
+      (filter
+        (filter_name)
+        (arg
+          (string))))))
