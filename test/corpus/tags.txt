@@ -86,7 +86,8 @@ For loop
 Blocks
 ================================================================================
 {% block main %}
-  {% block sub %}{% endblock %}
+  {% block sub-name %}{% endblock %}
+  {% block 🎉 %}{% endblock %}
 {% endblock main %}
 --------------------------------------------------------------------------------
 
@@ -94,15 +95,19 @@ Blocks
   (block
     (start_tag)
     (arguments
-      (arg
-        (identifier)))
+      (name))
     (body
       (text)
       (block
         (start_tag)
         (arguments
-          (arg
-            (identifier)))
+          (name))
+        (end_tag))
+      (text)
+      (block
+        (start_tag)
+        (arguments
+          (name))
         (end_tag))
       (text))
     (end_tag)))
@@ -192,7 +197,8 @@ Verbatim
 (template
   (block
     (start_tag)
-    (text)
+    (body
+      (text))
     (end_tag)))
 
 ================================================================================
@@ -217,5 +223,6 @@ Verbatim with spaced end tag
 (template
   (block
     (start_tag)
-    (text)
+    (body
+      (text))
     (end_tag)))

@@ -4,11 +4,23 @@ function sep1(rule, separator) {
 
 function block($, name) {
     let body = null;
+    let args = null;
+
+    if ((name == "block") || (name == "verbatim")) {
+        // Block and verbatim tags allow arbitrary names (not identifiers), for example
+        // `pre-content` or emoji.
+        args = alias(repeat($.name), $.arguments);
+    }
+    else {
+        args = alias(repeat($._tag_arg), $.arguments)
+    }
 
     if (name == "comment") {
-        body = optional(alias($._comment_block_text, $.comment_text));
+        // Embed the (comment_text) inside a (body) to match other blocks.
+        body = alias(repeat(alias($._comment_block_text, $.comment_text)), $.body);
     } else if (name == "verbatim") {
-        body = optional(alias($._verbatim_block_text, $.text));
+        // Embed the (text) inside a (body) to match other blocks.
+        body = alias(repeat(alias($._verbatim_block_text, $.text)), $.body);
     } else {
         body = alias(repeat($._node), $.body);
     }
@@ -16,12 +28,12 @@ function block($, name) {
     return seq(
         "{%",
         alias(name, $.start_tag),
-        alias(repeat($._tag_arg), $.arguments),
+        args,
         "%}",
         body,
         "{%",
         alias("end" + name, $.end_tag),
-        optional($._name),
+        alias(optional($.name), ""),
         "%}",
     );
 }
@@ -44,7 +56,7 @@ module.exports = grammar({
 
         filter: ($) =>
             seq(
-                alias($._name, $.filter_name),
+                alias($._identifier, $.filter_name),
                 optional(seq(":", alias($._value, $.arg))),
             ),
 
@@ -55,7 +67,7 @@ module.exports = grammar({
 
         arg: ($) => seq($._value, optional(seq("|", $.filters))),
 
-        kwarg: ($) => seq(alias($._name, $.name), "=", $.arg),
+        kwarg: ($) => seq(alias($._identifier, $.name), "=", $.arg),
 
         comment: ($) => $._inline_comment,
 
@@ -65,7 +77,7 @@ module.exports = grammar({
         tag: ($) =>
             seq(
                 "{%",
-                alias($._name, $.tag_name),
+                alias($._identifier, $.tag_name),
                 alias(repeat($._tag_arg), $.arguments),
                 "%}",
             ),
@@ -87,9 +99,11 @@ module.exports = grammar({
             return choice(...tag_names.map((name) => block($, name)));
         },
 
-        _name: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
+        name: ($) => /[^{}%#\s]+/u,
 
-        identifier: ($) => sep1($._name, "."),
+        _identifier: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
+
+        identifier: ($) => sep1($._identifier, "."),
 
         string: ($) => choice(/"[^"]*"/, /'[^']*'/),
 
@@ -146,6 +160,6 @@ module.exports = grammar({
                 "forloop.parentloop",
             ),
 
-        text: (_) => /([^{]|\{[^{%#])+/,
+        text: ($) => /([^{]|\{[^{%#])+/,
     },
 });

@@ -59,6 +59,10 @@
           "named": true
         },
         {
+          "type": "name",
+          "named": true
+        },
+        {
           "type": "operator",
           "named": true
         }
@@ -82,19 +86,11 @@
           "named": true
         },
         {
-          "type": "comment_text",
-          "named": true
-        },
-        {
           "type": "end_tag",
           "named": true
         },
         {
           "type": "start_tag",
-          "named": true
-        },
-        {
-          "type": "text",
           "named": true
         }
       ]
@@ -114,6 +110,10 @@
         },
         {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "comment_text",
           "named": true
         },
         {
@@ -324,6 +324,10 @@
         }
       ]
     }
+  },
+  {
+    "type": "",
+    "named": false
   },
   {
     "type": "!=",

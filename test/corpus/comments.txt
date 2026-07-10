@@ -53,7 +53,8 @@ Multi-line comment tag
 (template
   (block
     (start_tag)
-    (comment_text)
+    (body
+      (comment_text))
     (end_tag)))
 
 ================================================================================
@@ -70,13 +71,17 @@ Empty comment tag
 ================================================================================
 Comment tag with spaced end tag
 ================================================================================
-{% comment %}
+{% comment "Optional note"%}
   {% if this_is_not_parsed %}
-{%   endcomment   %}
+{%endcomment   %}
 --------------------------------------------------------------------------------
 
 (template
   (block
     (start_tag)
-    (comment_text)
+    (arguments
+      (arg
+        (string)))
+    (body
+      (comment_text))
     (end_tag)))
