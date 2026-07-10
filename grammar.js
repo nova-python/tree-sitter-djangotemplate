@@ -2,10 +2,40 @@ function sep1(rule, separator) {
     return seq(rule, repeat(seq(separator, rule)));
 }
 
+function block($, name) {
+    let body = null;
+
+    if (name == "comment") {
+        body = optional(alias($._comment_block_text, $.comment_text));
+    } else if (name == "verbatim") {
+        body = optional(alias($._verbatim_block_text, $.text));
+    } else {
+        body = alias(repeat($._node), $.body);
+    }
+
+    return seq(
+        "{%",
+        alias(name, $.start_tag),
+        alias(repeat($._tag_arg), $.arguments),
+        "%}",
+        body,
+        "{%",
+        alias("end" + name, $.end_tag),
+        optional($._name),
+        "%}",
+    );
+}
+
 module.exports = grammar({
     name: "djangotemplate",
 
     extras: ($) => [" ", "\t"],
+
+    externals: ($) => [
+        $._comment_block_text,
+        $._verbatim_block_text,
+        $._inline_comment,
+    ],
 
     rules: {
         template: ($) => repeat($._node),
@@ -15,7 +45,7 @@ module.exports = grammar({
         filter: ($) =>
             seq(
                 alias($._name, $.filter_name),
-                optional(seq(":", alias($._value, $.arg)))
+                optional(seq(":", alias($._value, $.arg))),
             ),
 
         filters: ($) => sep1($.filter, "|"),
@@ -27,7 +57,7 @@ module.exports = grammar({
 
         kwarg: ($) => seq(alias($._name, $.name), "=", $.arg),
 
-        comment: ($) => token(seq("{#", /.*/, "#}")),
+        comment: ($) => $._inline_comment,
 
         _tag_arg: ($) =>
             choice($.keyword, $.operator, $.keyword_operator, $.arg, $.kwarg),
@@ -37,7 +67,7 @@ module.exports = grammar({
                 "{%",
                 alias($._name, $.tag_name),
                 alias(repeat($._tag_arg), $.arguments),
-                "%}"
+                "%}",
             ),
 
         block: ($) => {
@@ -54,23 +84,7 @@ module.exports = grammar({
                 "verbatim",
                 "with",
             ];
-            return choice(
-                ...tag_names.map((name) =>
-                    seq(
-                        "{%",
-                        alias(name, $.start_tag),
-                        alias(repeat($._tag_arg), $.arguments),
-                        "%}",
-
-                        alias(repeat($._node), $.body),
-
-                        "{%",
-                        alias("end" + name, $.end_tag),
-                        optional($._name),
-                        "%}"
-                    )
-                )
-            );
+            return choice(...tag_names.map((name) => block($, name)));
         },
 
         _name: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
@@ -111,7 +125,7 @@ module.exports = grammar({
                 "openbrace",
                 "closebrace",
                 "opencomment",
-                "closecomment"
+                "closecomment",
             ),
 
         operator: ($) => choice("==", "!=", "<", ">", "<=", ">="),
@@ -128,7 +142,8 @@ module.exports = grammar({
                 "forloop.revcounter0",
                 "forloop.first",
                 "forloop.last",
-                "forloop.parentloop"
+                "forloop.length",
+                "forloop.parentloop",
             ),
 
         text: (_) => /([^{]|\{[^{%#])+/,

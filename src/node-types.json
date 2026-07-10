@@ -82,11 +82,19 @@
           "named": true
         },
         {
+          "type": "comment_text",
+          "named": true
+        },
+        {
           "type": "end_tag",
           "named": true
         },
         {
           "type": "start_tag",
+          "named": true
+        },
+        {
+          "type": "text",
           "named": true
         }
       ]
@@ -130,6 +138,11 @@
   },
   {
     "type": "builtin",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "comment",
     "named": true,
     "fields": {}
   },
@@ -233,6 +246,7 @@
   {
     "type": "template",
     "named": true,
+    "root": true,
     "fields": {},
     "children": {
       "multiple": true,
@@ -392,7 +406,7 @@
     "named": false
   },
   {
-    "type": "comment",
+    "type": "comment_text",
     "named": true
   },
   {
@@ -417,6 +431,10 @@
   },
   {
     "type": "forloop.last",
+    "named": false
+  },
+  {
+    "type": "forloop.length",
     "named": false
   },
   {
