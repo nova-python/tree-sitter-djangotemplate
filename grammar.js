@@ -86,6 +86,7 @@ module.exports = grammar({
             const tag_names = [
                 "autoescape",
                 "block",
+                "blocktrans",
                 "blocktranslate",
                 "comment",
                 "filter",
