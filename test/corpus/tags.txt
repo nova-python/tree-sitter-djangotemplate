@@ -83,6 +83,34 @@ For loop
     (end_tag)))
 
 ================================================================================
+For loop (Destructured and reversed)
+================================================================================
+{% for item1, item2 in items|filter:"arg1,arg2" reversed %}
+{% endfor %}
+--------------------------------------------------------------------------------
+
+(template
+  (block
+    (start_tag)
+    (arguments
+      (arg
+        (identifier))
+      (arg
+        (identifier))
+      (keyword_operator)
+      (arg
+        (identifier)
+        (filters
+          (filter
+            (filter_name)
+            (arg
+              (string)))))
+      (keyword))
+    (body
+      (text))
+    (end_tag)))
+
+================================================================================
 Blocks
 ================================================================================
 {% block main %}

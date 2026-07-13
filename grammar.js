@@ -72,7 +72,7 @@ module.exports = grammar({
         comment: ($) => $._inline_comment,
 
         _tag_arg: ($) =>
-            choice($.keyword, $.operator, $.keyword_operator, $.arg, $.kwarg),
+            choice($.keyword, $.operator, $.keyword_operator, $.arg, $.kwarg, ","),
 
         tag: ($) =>
             seq(
@@ -121,6 +121,8 @@ module.exports = grammar({
                 "off",
                 // cycle
                 "silent",
+                // for
+                "reversed",
                 // include
                 "with",
                 "only",

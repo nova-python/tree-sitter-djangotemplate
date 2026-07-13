@@ -220,6 +220,10 @@
         {
           "type": "SYMBOL",
           "name": "kwarg"
+        },
+        {
+          "type": "STRING",
+          "value": ","
         }
       ]
     },
@@ -1335,6 +1339,10 @@
         {
           "type": "STRING",
           "value": "silent"
+        },
+        {
+          "type": "STRING",
+          "value": "reversed"
         },
         {
           "type": "STRING",
